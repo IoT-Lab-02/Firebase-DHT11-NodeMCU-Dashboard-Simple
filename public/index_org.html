@@ -1,0 +1,43 @@
+<body>
+    <h1>DHT11 Logger by Firebase</h1>
+    <p></p>
+    <h3 id="dht11Logger"></h3>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-database.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD-JtbrRluHNBjc_AMeFvSNyuiA8hQk8qc",
+            authDomain: "dht11-firebase-1be7c.firebaseapp.com",
+            databaseURL: "https://dht11-firebase-1be7c.firebaseio.com",
+            projectId: "dht11-firebase-1be7c",
+            storageBucket: "dht11-firebase-1be7c.appspot.com",
+            messagingSenderId: "660583975030",
+            appId: "1:660583975030:web:b5645538a78964a123b757",
+            measurementId: "G-PEYGEXJT7C"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        // get the text value from the database
+        var bigOne = document.getElementById('dht11Logger');
+        var dbRef = firebase.database().ref('logDHT/').limitToLast(1);
+        dbRef.on('child_added', function(snapshot) {
+            var sHum = snapshot.val().humidity + " %"
+            var sTemp = snapshot.val().temperature + " C"
+            var sTime = snapshot.val().time
+            bigOne.innerText = "Humidity : " + sHum + '\n' + "Temp : " + sTemp + '\n' + "Time : " + sTime + '\n';
+            //console.log(snapshot.val());
+        })
+    </script>
+
+</body>

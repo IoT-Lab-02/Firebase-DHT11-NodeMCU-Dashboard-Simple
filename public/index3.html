@@ -1,0 +1,95 @@
+<html>
+<head>
+</head>
+<body>
+    <h3>Realtime Temperature/ Humidity Monitor based on Google Firebase</h3>
+    <p></p>
+    <h3 id="chartContainer"></h3>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+    <!-- canvasjs -->
+    <script src="./canvasjs-2.3.2/canvasjs.min.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD-JtbrRluHNBjc_AMeFvSNyuiA8hQk8qc",
+            authDomain: "dht11-firebase-1be7c.firebaseapp.com",
+            databaseURL: "https://dht11-firebase-1be7c.firebaseio.com",
+            projectId: "dht11-firebase-1be7c",
+            storageBucket: "dht11-firebase-1be7c.appspot.com",
+            messagingSenderId: "660583975030",
+            appId: "1:660583975030:web:b5645538a78964a123b757",
+            measurementId: "G-PEYGEXJT7C"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+            text: "Temperature & Humidity",
+            fontColor: '#03254E',
+            },
+            axisX: {
+                title: "Time",
+                titleFontSize: 16,
+                titleFontColor: '#2176AE',
+                valueFormatString: "HH:mm",
+                labelFontColor: '#03254E',
+                //fontFamily: "'Patrick Hand SC', cursive"
+            },
+            axisY: {
+                valueFormatString: "0.0#",
+                minimum: 0,
+                maximum: 90,
+                title: "Temp/Humi",
+                titleFontColor: '#2176AE',
+                titleFontSize: 16,
+                labelFontColor: '#03254E',
+                //fontFamily: "'Patrick Hand SC', cursive"
+            },
+            toolTip: {
+                shared: true,
+                contentFormatter: function(e) {
+                    var content = CanvasJS.formatDate(e.entries[0].dataPoint.x, "HH:mm:ss") + "<br>";
+                    content += "<strong>Temperature</strong>: " + e.entries[0].dataPoint.y + " &deg;C<br>";
+                    content += "<strong>Humidity</strong>: " + e.entries[1].dataPoint.y + " %";
+                    return content;
+                }
+            },
+            animationEnabled: true,
+            data: [{
+                type: "line", //change it to line, area, column, pie, etc
+                dataPoints: []
+            }, {
+                type: "line", //change it to line, area, column, pie, etc
+                dataPoints: []
+            }]
+
+        });
+
+        // get the text value from the database
+        //var bigOne = document.getElementById('chartContainer);
+        var dbRef = firebase.database().ref('logDHT/');
+
+        dbRef.on('child_added', function(snapshot) {
+            var row = snapshot.val();
+            row.time = new Date(row.time);
+            chart.options.data[0].dataPoints.push({
+                x: row.time,
+                y: row.temperature
+            });
+            chart.options.data[1].dataPoints.push({
+                x: row.time,
+                y: row.humidity
+            });
+            chart.render();
+        });
+    </script>
+</body>
+</html>
