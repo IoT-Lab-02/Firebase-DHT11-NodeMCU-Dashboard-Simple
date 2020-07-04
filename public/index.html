@@ -4,7 +4,10 @@
     </head>
 <body>
     <!-- <h3>Realtime Temperature/ Humidity Monitor, Firebase + NodeMCU</h3> -->
-    <h3 id="chartContainer"></h3>
+
+    <div id="chartContainer" style="height: 350px; width: 100%;">
+   </div>
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
@@ -29,16 +32,20 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
+        // CnavasJS.Chart 객체 생성 및 실4
         var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            theme: "light3",
-            title: {
-            text: "Temperature/ Humidity Monitor, Firebase + NodeMCU",
-            fontColor: '#03254E',
+                animationEnabled: true,
+                theme: "light1",
+                title: {
+                text: "Weather Monitor, Firebase + NodeMCU",
+                fontColor: '#03254E',
             },
+            legend: {
+        		    fontSize: 15
+          	},
             axisX: {
                 title: "Time",
-                titleFontSize: 16,
+                titleFontSize: 14,
                 titleFontColor: '#03254E',
                 valueFormatString: 'HH:mm:ss',
                 labelFontColor: '#03254E',
@@ -47,9 +54,9 @@
                 valueFormatString: "0.0#",
                 minimum: 0,
                 maximum: 90,
-                title: "Temperature(°C)/ Humidity(%)",
+                title: "Temperature(°C) Humidity(%)",
                 titleFontColor: '#03254E',
-                titleFontSize: 16,
+                titleFontSize: 14,
                 labelFontColor: '#03254E',
             },
             toolTip: {
@@ -63,10 +70,19 @@
             },
             animationEnabled: true,
             data: [{
-                type: "spline", //change it to line, area, column, pie, etc
+                type: "spline", //change it to line, area, column, pie,
+                legendText: "Temperature",
+                showInLegend: true,
+                markerColor: "#4682B4",
+                markerSize: 1,
+                // type: "splineArea",
+			          // color: "rgba(83, 223, 128, .6)",
                 dataPoints: []
             }, {
                 type: "spline", //change it to line, area, column, pie, etc
+                legendText: "Humidity",
+                showInLegend: true,
+                markerSize: 1,
                 dataPoints: []
             }]
 
